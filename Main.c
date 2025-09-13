@@ -52,7 +52,7 @@ void Iter()
         uint8_t messageData[CAN_LEN];
         for(int i = 0; i < CAN_LEN; i++) messageData[i] = buffer[tailIndex].data[i];
 
-        // Advance the tail to the next value (we will not be using buffer tail again in the iteration)
+        // Advance the tail to the next value (we will not be using buffer tail again to process this message)
         bufferTail = (bufferTail + 1) & QUEUE_MASK;
 
         uint8_t outputData[CAN_LEN + 2 + 4]; //2 header bytes + 4 ID bytes + CAN_LEN data bytes
@@ -67,7 +67,7 @@ void Iter()
         outputData[4] = (uint8_t) ((messageID >> 8) & 0xFF);
         outputData[5] = (uint8_t) ((messageID >> 0) & 0xFF);
 
-        //Sent 14 bit UART packet to the HAL 
+        //Sent 14-bit UART packet to the HAL 
         for(int i = 0; i < CAN_LEN; i++)
         {
             outputData[6+i] = messageData[i];
